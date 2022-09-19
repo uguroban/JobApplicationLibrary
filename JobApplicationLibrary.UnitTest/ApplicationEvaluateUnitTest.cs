@@ -1,4 +1,5 @@
 using JobApplicationLibrary.Models;
+using Moq;
 
 namespace JobApplicationLibrary.UnitTest
 {
@@ -9,7 +10,7 @@ namespace JobApplicationLibrary.UnitTest
         public void Application_WithUnderAge_TransfferedtoAutoRejected()
         {
             //Arrange
-            var evaluator = new ApplicationEvaluator();
+            var evaluator = new ApplicationEvaluator(null);
             var form = new JobApplication()
             {
                 Applicant = new Applicant()
@@ -31,11 +32,16 @@ namespace JobApplicationLibrary.UnitTest
         [Test]
         public void Application_WithNoTechStack_TransfferedtoAutoRejected()
         {
+
             //Arrange
-            var evaluator=new ApplicationEvaluator();
+            var mockValidator= new Mock<IIdentityValidator>();
+
+            var evaluator=new ApplicationEvaluator(mockValidator.Object);
+            mockValidator.Setup(i=>i.IsValidIndentity()).Returns(true);
+
             var form = new JobApplication()
             {
-                Applicant = new Applicant() { Age=20},
+                Applicant = new Applicant() { Age=20,FirstName="Uður",LastName="Bomba",IdentityNumber=111,BofYear=2022},
                 TechStackList = new System.Collections.Generic.List<string>() { "" }
 
             };
@@ -52,7 +58,7 @@ namespace JobApplicationLibrary.UnitTest
         public void Application_WithHighTechStack_TransfferedtoAutoAccepted()
         {
             //Arrange
-            var evaluator = new ApplicationEvaluator();
+            var evaluator = new ApplicationEvaluator(null);
             var form = new JobApplication()
             {
                 Applicant = new Applicant() { Age=25},
