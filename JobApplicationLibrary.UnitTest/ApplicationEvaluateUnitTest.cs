@@ -41,7 +41,7 @@ namespace JobApplicationLibrary.UnitTest
 
             var form = new JobApplication()
             {
-                Applicant = new Applicant() { Age=20,FirstName="Uður",LastName="oban",IdentityNumber=111,BofYear=2022},
+                Applicant = new Applicant() { Age=20},
                 TechStackList = new System.Collections.Generic.List<string>() { "" }
 
             };
@@ -99,6 +99,31 @@ namespace JobApplicationLibrary.UnitTest
 
             //Assert
             Assert.AreEqual(ApplicationResult.TransferredtoHR, result);
+
+        }
+
+        [Test]
+        public void Application_WithValidIdentity_TransfferedtoLead()
+        {
+            //Arrange
+            var mockValidator = new Mock<IIdentityValidator>();
+
+            var evaluator = new ApplicationEvaluator(mockValidator.Object);
+           // mockValidator.Setup(i => i.IsValidIndentity()).Returns(true);
+
+            var form = new IdentityValidator()
+            {
+                Applicant = new Applicant() { Age = 25,IdentityNumber=13751688526,FirstName="Uður",LastName="Oban",BofYear=1989 },
+                
+            };
+
+           
+
+            //Action
+            var result = evaluator.CheckIdentityNumber(form);
+
+            //Assert
+            Assert.AreEqual(ApplicationResult.TransferredtoLead, result);
 
         }
 

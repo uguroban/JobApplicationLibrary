@@ -25,6 +25,10 @@ namespace JobApplicationLibrary
             if (!validIdentity) { 
                 return ApplicationResult.TransferredtoHR; 
             }
+            else
+            {
+                return ApplicationResult.TransferredtoLead;
+            }
 
 
             var sr = GetTechStackRate(form.TechStackList);
@@ -44,6 +48,19 @@ namespace JobApplicationLibrary
             var matchCount = userTechStacks.Where(i => techStackList.Contains(i, StringComparer.OrdinalIgnoreCase)).Count();
             return (int)(double)(matchCount/techStackList.Count())*100;
             
+        }
+
+        public ApplicationResult CheckIdentityNumber(IdentityValidator identity)
+        {
+            var valid=identity.IsValidIndentity();
+            if (!valid)
+            {
+                return ApplicationResult.TransferredtoHR;
+            }
+            else
+            {
+                return ApplicationResult.TransferredtoLead;
+            }
         }
     }
 
